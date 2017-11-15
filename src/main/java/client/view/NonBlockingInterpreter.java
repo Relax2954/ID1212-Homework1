@@ -56,17 +56,13 @@ public class NonBlockingInterpreter implements Runnable {
                                       Integer.parseInt(cmdLine.getParameter(1)),
                                       new ConsoleOutput());
                         break;
-                        /*case Startgame:     NOT IMPLEMENTING THIS WAY, FREE DEL
-                        contr.sendStartgame();
-                        break;*/
+                    case START:     
+                        contr.sendStartgame(cmdLine.getParameter(0));
+                        break;
                     case GUESS:
                         contr.sendGuess(cmdLine.getParameter(0));
                         break;
-                        /*case USER:        NOT IMPLEMENTING THIS WAY, FREE DEL
-                        contr.sendUsername(cmdLine.getParameter(0));
-                        break;*/
-                    default:
-                        contr.sendMsg(cmdLine.getUserInput());
+                    
                 }
             } catch (Exception e) {
                 outMgr.println("Operation failed");

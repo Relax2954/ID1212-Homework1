@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package client.net;
 
 import java.io.IOException;
@@ -10,7 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-//import Protocol.common.Constants;
 import Protocol.common.Message;
 import Protocol.common.MessageException;
 import Protocol.common.MsgType;
@@ -23,6 +18,7 @@ import Protocol.common.MsgType;
  * Manages all communication with the server.
  */
 public class ServerConnection {
+
     private static final int TIMEOUT_HALF_HOUR = 1800000;
     private static final int TIMEOUT_HALF_MINUTE = 30000;
     private Socket socket;
@@ -31,12 +27,13 @@ public class ServerConnection {
     private boolean connected;
 
     /**
-     * Creates a new instance and connects to the specified server. Also starts a listener thread
-     * receiving broadcast messages from server.
+     * Creates a new instance and connects to the specified server. Also starts
+     * a listener thread receiving broadcast messages from server.
      *
-     * @param host             Host name or IP address of server.
-     * @param port             Server's port number.
-     * @param broadcastHandler Called whenever a broadcast is received from server.
+     * @param host Host name or IP address of server.
+     * @param port Server's port number.
+     * @param broadcastHandler Called whenever a broadcast is received from
+     * server.
      * @throws IOException If failed to connect.
      */
     public void connect(String host, int port, OutputHandler broadcastHandler) throws
@@ -51,7 +48,8 @@ public class ServerConnection {
     }
 
     /**
-     * Closes the connection with the server and stops the broadcast listener thread.
+     * Closes the connection with the server and stops the broadcast listener
+     * thread.
      *
      * @throws IOException If failed to close socket.
      */
@@ -62,33 +60,14 @@ public class ServerConnection {
         connected = false;
     }
 
-    /**
-     * Sends the user's username to the server. That username will be prepended to all messages
-     * originating from this client, until a new username is specified.
-     *
-     * @param username The current user's username.
-     */
-    /*public void sendUsername(String username) throws IOException {
-    sendMsg(MsgType.USER, username);
-    }*/
-    
     public void sendGuess(String guess) throws IOException {
         sendMsg(MsgType.GUESS, guess);
     }
 
-    /**
-     * Sends a chat entry to the server, which will broadcast it to all clients, including the
-     * sending client.
-     *
-     * @param msg The message to broadcast.
-     */
-    public void sendChatEntry(String msg) throws IOException {
-        sendMsg(MsgType.ENTRY, msg);
+
+    public void sendStartgame(String start) throws IOException {
+        sendMsg(MsgType.START, start);
     }
-    
-    /*public void sendStartgame() throws IOException {     NOT IMPLEMENTING THIS WAY, FREE DEL
-    sendMsg(MsgType.Startgame, "hmmm");
-    }*/
 
     private void sendMsg(MsgType type, String body) throws IOException {
         Message msg = new Message(type, body);
@@ -96,8 +75,11 @@ public class ServerConnection {
         toServer.flush();
         toServer.reset();
     }
+    
+    
 
     private class Listener implements Runnable {
+
         private final OutputHandler outputHandler;
 
         private Listener(OutputHandler outputHandler) {
@@ -118,7 +100,7 @@ public class ServerConnection {
         }
 
         private String extractMsgBody(Message msg) {
-            if (msg.getType() != MsgType.BROADCAST) {
+            if (msg.getType() != MsgType.GIVE) {
                 throw new MessageException("Received corrupt message: " + msg);
             }
             return msg.getBody();

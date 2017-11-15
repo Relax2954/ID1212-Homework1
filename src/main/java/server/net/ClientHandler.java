@@ -14,40 +14,32 @@ import java.net.Socket;
 import Protocol.common.Message;
 import Protocol.common.MessageException;
 import Protocol.common.MsgType;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 //import java.util.List;
 import java.util.Random;
-import server.net.ChatServer;
 
 /**
  *
  * @author Relax2954
  */
 /**
- * Handles all communication with one particular chat client.
+ * Handles all communication with one particular  client.
  */
 class ClientHandler implements Runnable {
 
-    private static final String JOIN_MESSAGE = " joined conversation.";
-    private static final String LEAVE_MESSAGE = " left conversation.";
-    private static final String USERNAME_DELIMETER = ": ";
-    private final ChatServer server;
+    private final TheServer server;
     private final Socket clientSocket;
     private final String[] conversationWhenStarting;
     private ObjectInputStream fromClient;
     private ObjectOutputStream toClient;
-    private String username = "anonymous";
     private String guess = null;
-//    private String testttt="lolanje";
-    String pocetni = "Start game";
     private boolean connected;
     private Allwords myallwords;
     private int score = 0; //the total current score;
     private String chosenword;
-    private volatile String checkerString;   //SHOULD IT BE VOLATILE, MAYBE ATOMIC?  WHY ARE THESE PRIVATE?????????
+    private volatile String checkerString;   //SHOULD IT BE VOLATILE, MAYBE ATOMIC?  check private?
     private volatile int remaining = 0;  //remaining shots to take
     private char[] checker; //ovdje stavlja  capword cifru lokacije pogodjenog slova
     private String tempor; //this is for just printiing out the current ___f__c__
@@ -59,7 +51,7 @@ class ClientHandler implements Runnable {
      * @param clientSocket The socket to which this handler's client is
      * connected.
      */
-    ClientHandler(ChatServer server, Socket clientSocket, String[] conversation) {
+    ClientHandler(TheServer server, Socket clientSocket, String[] conversation) {
         this.server = server;
         this.clientSocket = clientSocket;
         this.conversationWhenStarting = conversation;
@@ -77,23 +69,19 @@ class ClientHandler implements Runnable {
     }
 
     public String gamelogic(String theword, String myguess) { //this is where the game logic magic happens
-        if(theword==null)
+        if (theword == null) {
             return "Please start the game before guessing";
+        }
         String capguess = myguess.toLowerCase();
         String capword = theword.toLowerCase();
-        /*char[] capguessarray = capguess.toLowerCase().toCharArray();   NOT NEEDED -DEL
         char[] capwordarray = capword.toLowerCase().toCharArray();
-        int minLength = Math.min(capguessarray.length, capwordarray.length);*/
-        char[] capwordarray = capword.toLowerCase().toCharArray();
-        
-        
-        if(remaining==0){
+
+        if (remaining == 0) {
             return "Please start a new game.";
-        }
-        else if (capguess.length() != capword.length() && capguess.length() != 1) {
+        } else if (capguess.length() != capword.length() && capguess.length() != 1) {
             remaining--;
             checkerString = String.valueOf(checker);
-            return checkerString + "\nRemaining attempts left: " + remaining;
+            return checkerString + "\nRemaining attempts: " + remaining;
         } else if (capguess.equals(capword)) {
             score++;
             remaining = 0;
@@ -101,7 +89,7 @@ class ClientHandler implements Runnable {
         } else if (!capword.contains(capguess)) {
             remaining--;
             checkerString = String.valueOf(checker);
-            return checkerString + "\nRemaining attempts left: " + remaining;
+            return checkerString + "\nRemaining attempts: " + remaining;
         } else {
             for (int i = 0; i < capword.length(); i++) {
                 if (capguess.charAt(0) == capwordarray[i]) {
@@ -114,7 +102,7 @@ class ClientHandler implements Runnable {
                 remaining = 0;
                 return capword + "\nYour total score is " + score;
             }
-            return checkerString + "\nRemaining attempts left: " + remaining;
+            return checkerString + "\nRemaining attempts: " + remaining;
         }
     }
 
@@ -136,28 +124,17 @@ class ClientHandler implements Runnable {
             try {
                 Message msg = (Message) fromClient.readObject();
                 switch (msg.getType()) {
-                    /*case USER:
-                    username = msg.getBody();                   NOT IMPLEMENTING THIS WAY, FREE DEL
-                    server.broadcast(username + JOIN_MESSAGE);
-                    break;*/
-                    /*case Startgame:           NOT IMPLEMENTING THIS WAY, FREE DEL
-                        testttt=msg.getBody();
-                        String mojarijec= chooseWord();
-                        sendMsg("WOOOOOOOT: "+mojarijec);*/
-                    case ENTRY:  //game logic implemented here
+                    case START:
                         String gameentry = msg.getBody();
-                        if (gameentry.toLowerCase().contains(pocetni.toLowerCase())) {
-                            chosenword = chooseWord();
-                            remaining = chosenword.length();
-                            checker = new char[chosenword.length()];
-                            Arrays.fill(checker, '_');
-                            checkerString = String.valueOf(checker);
-                            sendMsg(checkerString+" "+ chosenword);
-                        } else {
-                           sendMsg("Please start a new game or guess the word");
+                        if (gameentry.toLowerCase().contains("game".toLowerCase())) {
+                        chosenword = chooseWord();
+                        remaining = chosenword.length();
+                        checker = new char[chosenword.length()];
+                        Arrays.fill(checker, '_');
+                        checkerString = String.valueOf(checker);
+                        sendMsg(checkerString + " " + chosenword);
                         }
                         break;
-
                     case GUESS:
                         guess = msg.getBody();
                         tempor = gamelogic(chosenword, guess);
@@ -167,7 +144,6 @@ class ClientHandler implements Runnable {
                     case DISCONNECT:
                         sendMsg("You are now disconnected.");
                         disconnectClient();
-                        /*server.broadcast(username + LEAVE_MESSAGE);*/
                         break;
                     default:
                         throw new MessageException("Received corrupt message: " + msg);
@@ -186,7 +162,7 @@ class ClientHandler implements Runnable {
      */
     void sendMsg(String msgBody) throws UncheckedIOException {
         try {
-            Message msg = new Message(MsgType.BROADCAST, msgBody);
+            Message msg = new Message(MsgType.GIVE, msgBody);
             toClient.writeObject(msg);
             toClient.flush();
             toClient.reset();

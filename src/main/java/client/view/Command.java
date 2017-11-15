@@ -10,21 +10,16 @@ package client.view;
  * @author Relax2954
  */
 /**
- * Defines all commands that can be performed by a user of the chat application.
+ * Defines all commands that can be performed by a user of the application.
  */
 public enum Command {
-    /**
-     * Specifies a user name.
-     */
-    USER,
     //start the game
-    //Startgame,
-    
+    START,
     //guess
     GUESS,
     /**
-     * Establish a connection to the server. The first parameter is IP address (or host name), the
-     * second is port number.
+     * Establish a connection to the server. The first parameter is IP address
+     * (or host name), the second is port number.
      */
     CONNECT,
     /**
@@ -32,8 +27,9 @@ public enum Command {
      */
     QUIT,
     /**
-     * No command was specified. This means the entire command line is interpreted as an entry in
-     * the game.
+     * No command was specified. This means the entire command line is
+     * interpreted as an entry in the game.
      */
-    NO_COMMAND
+    NO_COMMAND;
+
 }

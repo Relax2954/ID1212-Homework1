@@ -10,25 +10,21 @@ import java.io.UncheckedIOException;
 import java.util.concurrent.CompletableFuture;
 import client.net.ServerConnection;
 import client.net.OutputHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author Relax2954
  */
 /**
- * This controller decouples the view from the network layer. All methods, except
- * <code>disconnect</code>, submit their task to the common thread pool, provided by
- * <code>ForkJoinPool.commonPool</code>, and then return immediately.
+ * This controller decouples the view from the network layer. All methods,
+ * except <code>disconnect</code>, submit their task to the common thread pool,
+ * provided by <code>ForkJoinPool.commonPool</code>, and then return
+ * immediately.
  */
 public class Controller {
+
     private final ServerConnection serverConnection = new ServerConnection();
 
-    /**
-     * @see ServerConnection#connect(java.lang.String, int,
-     * se.kth.id1212.sockets.objprotocolchat.client.net.OutputHandler)
-     */
     public void connect(String host, int port, OutputHandler outputHandler) {
         CompletableFuture.runAsync(() -> {
             try {
@@ -40,25 +36,13 @@ public class Controller {
     }
 
     /**
-     * @see ServerConnection#disconnect() Blocks until disconnection is completed.
+     * @see ServerConnection#disconnect() Blocks until disconnection is
+     * completed.
      */
     public void disconnect() throws IOException {
         serverConnection.disconnect();
     }
 
-    /**
-     * @see ServerConnection#sendUsername(java.lang.String)
-     */
-    /*public void sendUsername(String username) {
-    CompletableFuture.runAsync(() -> {
-    try {
-    serverConnection.sendUsername(username);
-    } catch (IOException ioe) {
-    throw new UncheckedIOException(ioe);
-    }
-    });
-    }*/
-    
     public void sendGuess(String guess) {
         CompletableFuture.runAsync(() -> {
             try {
@@ -68,25 +52,12 @@ public class Controller {
             }
         });
     }
-    
-    /*//Send startgame                               NOT IMPLEMENTING THIS WAY, FREE DEL
-    public void sendStartgame() {
-    CompletableFuture.runAsync(() -> {
-    try {
-    serverConnection.sendStartgame();
-    } catch (IOException ioe) {
-    throw new UncheckedIOException(ioe);
-    }
-    });
-    }*/
 
-    /**
-     * @see ServerConnection#sendChatEntry(java.lang.String)
-     */
-    public void sendMsg(String msg) {
+    //Send startgame                               
+    public void sendStartgame(String start) {
         CompletableFuture.runAsync(() -> {
             try {
-                serverConnection.sendChatEntry(msg);
+                serverConnection.sendStartgame(start);
             } catch (IOException ioe) {
                 throw new UncheckedIOException(ioe);
             }

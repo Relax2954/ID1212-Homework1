@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author Relax2954
  */
 /**
- * A message between a chat client and the chat server.
+ * A message between a client and the server.
  */
 public class Message implements Serializable {
     private final MsgType type;

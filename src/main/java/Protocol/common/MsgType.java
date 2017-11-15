@@ -10,17 +10,13 @@ package Protocol.common;
  * @author Relax2954
  */
 public enum MsgType {
-
-    // all the users playing in the hangman game 
-    /*USER,*/
+    
     //start the actual game
-    /*Startgame,*/                               //NOT IMPLEMENTING THIS WAY, FREE DEL
-    // an entry(guess that a user has made)
-    ENTRY,
+    START,
     //startgame check
     GUESS,
     //The information that the server returns about the entry
-    BROADCAST,
+    GIVE,
     /*
     The client is about to disconnect and all the server resources related to
     the client should be released

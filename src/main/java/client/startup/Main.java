@@ -12,7 +12,7 @@ import client.view.NonBlockingInterpreter;
  */
 
 /**
- * Starts the chat client.
+ * Starts the client.
  */
 public class Main {
     /**
