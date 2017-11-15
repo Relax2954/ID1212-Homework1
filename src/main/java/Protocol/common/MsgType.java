@@ -15,7 +15,7 @@ public enum MsgType {
     START,
     //startgame check
     GUESS,
-    //The information that the server returns about the entry
+    //The information that the server returns about the certain input
     GIVE,
     /*
     The client is about to disconnect and all the server resources related to
