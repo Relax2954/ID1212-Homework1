@@ -21,6 +21,9 @@ public enum MsgType {
     The client is about to disconnect and all the server resources related to
     the client should be released
      */
+    //client sends wrong input
+    WRONGINPUT,
+    //disconnect
     DISCONNECT
 
 }

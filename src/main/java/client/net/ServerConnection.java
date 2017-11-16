@@ -68,6 +68,9 @@ public class ServerConnection {
     public void sendStartgame(String start) throws IOException {
         sendMsg(MsgType.START, start);
     }
+    public void sendWrongInput() throws IOException {
+        sendMsg(MsgType.WRONGINPUT, "");
+    }
 
     private void sendMsg(MsgType type, String body) throws IOException {
         Message msg = new Message(type, body);

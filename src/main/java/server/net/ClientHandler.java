@@ -134,13 +134,17 @@ class ClientHandler implements Runnable {
                         checkerString = String.valueOf(checker);
                         sendMsg(checkerString + " " + chosenword);
                         }
+                        else
+                            sendMsg("Please start game or guess the word.");
                         break;
                     case GUESS:
                         guess = msg.getBody();
                         tempor = gamelogic(chosenword, guess);
                         sendMsg(tempor);
-
                         break;
+                    case WRONGINPUT:
+                         sendMsg("Please start game or guess the word.");
+                         break;
                     case DISCONNECT:
                         sendMsg("You are now disconnected.");
                         disconnectClient();

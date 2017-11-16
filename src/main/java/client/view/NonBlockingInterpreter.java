@@ -62,7 +62,8 @@ public class NonBlockingInterpreter implements Runnable {
                     case GUESS:
                         contr.sendGuess(cmdLine.getParameter(0));
                         break;
-                    
+                    default:
+                        contr.sendWrongInput();
                 }
             } catch (Exception e) {
                 outMgr.println("Operation failed");

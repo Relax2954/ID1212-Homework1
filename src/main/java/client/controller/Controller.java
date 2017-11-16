@@ -63,4 +63,16 @@ public class Controller {
             }
         });
     }
+    
+    public void sendWrongInput() {
+        CompletableFuture.runAsync(() -> {
+            try {
+                serverConnection.sendWrongInput();
+            } catch (IOException ioe) {
+                throw new UncheckedIOException(ioe);
+            }
+        });
+    }
+    
+    
 }
