@@ -16,7 +16,6 @@ import Protocol.common.MsgType;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
-//import java.util.List;
 import java.util.Random;
 
 /**
@@ -134,7 +133,7 @@ class ClientHandler implements Runnable {
                             checker = new char[chosenword.length()];
                             Arrays.fill(checker, '_');
                             checkerString = String.valueOf(checker);
-                            sendMsg(checkerString + " " + chosenword);
+                            sendMsg(checkerString);
                         } else {
                             sendMsg("Please start game or guess the word.");
                         }
