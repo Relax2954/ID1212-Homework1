@@ -25,7 +25,7 @@ import java.util.Random;
  * @author Relax2954
  */
 /**
- * Handles all communication with one particular  client.
+ * Handles all communication with one particular client.
  */
 class ClientHandler implements Runnable {
 
@@ -81,6 +81,10 @@ class ClientHandler implements Runnable {
         } else if (capguess.length() != capword.length() && capguess.length() != 1) {
             remaining--;
             checkerString = String.valueOf(checker);
+            if (remaining == 0) {
+                score--;
+                return checkerString + "\nRemaining attempts: " + remaining + "\nYour total score is " + score;
+            }
             return checkerString + "\nRemaining attempts: " + remaining;
         } else if (capguess.equals(capword)) {
             score++;
@@ -89,6 +93,10 @@ class ClientHandler implements Runnable {
         } else if (!capword.contains(capguess)) {
             remaining--;
             checkerString = String.valueOf(checker);
+            if (remaining == 0) {
+                score--;
+                return checkerString + "\nRemaining attempts: " + remaining + "\nYour total score is " + score;
+            }
             return checkerString + "\nRemaining attempts: " + remaining;
         } else {
             for (int i = 0; i < capword.length(); i++) {
@@ -127,15 +135,15 @@ class ClientHandler implements Runnable {
                     case START:
                         String gameentry = msg.getBody();
                         if (gameentry.toLowerCase().contains("game".toLowerCase())) {
-                        chosenword = chooseWord();
-                        remaining = chosenword.length();
-                        checker = new char[chosenword.length()];
-                        Arrays.fill(checker, '_');
-                        checkerString = String.valueOf(checker);
-                        sendMsg(checkerString + " " + chosenword);
-                        }
-                        else
+                            chosenword = chooseWord();
+                            remaining = chosenword.length();
+                            checker = new char[chosenword.length()];
+                            Arrays.fill(checker, '_');
+                            checkerString = String.valueOf(checker);
+                            sendMsg(checkerString + " " + chosenword);
+                        } else {
                             sendMsg("Please start game or guess the word.");
+                        }
                         break;
                     case GUESS:
                         guess = msg.getBody();
@@ -143,8 +151,8 @@ class ClientHandler implements Runnable {
                         sendMsg(tempor);
                         break;
                     case WRONGINPUT:
-                         sendMsg("Please start game or guess the word.");
-                         break;
+                        sendMsg("Please start game or guess the word.");
+                        break;
                     case DISCONNECT:
                         sendMsg("You are now disconnected.");
                         disconnectClient();
