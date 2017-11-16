@@ -10,7 +10,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UncheckedIOException;
 import java.net.Socket;
-//import Protocol.common.Constants;
 import Protocol.common.Message;
 import Protocol.common.MessageException;
 import Protocol.common.MsgType;
@@ -31,7 +30,6 @@ class ClientHandler implements Runnable {
 
     private final TheServer server;
     private final Socket clientSocket;
-    private final String[] conversationWhenStarting;
     private ObjectInputStream fromClient;
     private ObjectOutputStream toClient;
     private String guess = null;
@@ -51,10 +49,9 @@ class ClientHandler implements Runnable {
      * @param clientSocket The socket to which this handler's client is
      * connected.
      */
-    ClientHandler(TheServer server, Socket clientSocket, String[] conversation) {
+    ClientHandler(TheServer server, Socket clientSocket) {
         this.server = server;
         this.clientSocket = clientSocket;
-        this.conversationWhenStarting = conversation;
         connected = true;
 
     }
@@ -125,9 +122,6 @@ class ClientHandler implements Runnable {
         } catch (IOException ioe) {
             throw new UncheckedIOException(ioe);
         }
-        for (String entry : conversationWhenStarting) {
-            sendMsg(entry);
-        }
         while (connected) {
             try {
                 Message msg = (Message) fromClient.readObject();
@@ -174,7 +168,7 @@ class ClientHandler implements Runnable {
      */
     void sendMsg(String msgBody) throws UncheckedIOException {
         try {
-            Message msg = new Message(MsgType.GIVE, msgBody);
+            Message msg = new Message(MsgType.NETWORKING, msgBody);
             toClient.writeObject(msg);
             toClient.flush();
             toClient.reset();

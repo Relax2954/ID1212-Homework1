@@ -1,9 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package client.view;
+
 import java.util.Scanner;
 import client.controller.Controller;
 import client.net.OutputHandler;
@@ -13,12 +9,14 @@ import client.net.OutputHandler;
  * @author Relax2954
  */
 /**
- * Reads and interprets user commands. The command interpreter will run in a separate thread, which
- * is started by calling the <code>start</code> method. Commands are executed in a thread pool, a
- * new prompt will be displayed as soon as a command is submitted to the pool, without waiting for
- * command execution to complete.
+ * Reads and interprets user commands. The command interpreter will run in a
+ * separate thread, which is started by calling the <code>start</code> method.
+ * Commands are executed in a thread pool, a new prompt will be displayed as
+ * soon as a command is submitted to the pool, without waiting for command
+ * execution to complete.
  */
 public class NonBlockingInterpreter implements Runnable {
+
     private static final String PROMPT = "> ";
     private final Scanner console = new Scanner(System.in);
     private boolean receivingCmds = false;
@@ -26,8 +24,9 @@ public class NonBlockingInterpreter implements Runnable {
     private final ThreadSafeStdOut outMgr = new ThreadSafeStdOut();
 
     /**
-     * Starts the interpreter. The interpreter will be waiting for user input when this method
-     * returns. Calling <code>start</code> on an interpreter that is already started has no effect.
+     * Starts the interpreter. The interpreter will be waiting for user input
+     * when this method returns. Calling <code>start</code> on an interpreter
+     * that is already started has no effect.
      */
     public void start() {
         if (receivingCmds) {
@@ -53,10 +52,10 @@ public class NonBlockingInterpreter implements Runnable {
                         break;
                     case CONNECT:
                         contr.connect(cmdLine.getParameter(0),
-                                      Integer.parseInt(cmdLine.getParameter(1)),
-                                      new ConsoleOutput());
+                                Integer.parseInt(cmdLine.getParameter(1)),
+                                new ConsoleOutput());
                         break;
-                    case START:     
+                    case START:
                         contr.sendStartgame(cmdLine.getParameter(0));
                         break;
                     case GUESS:
@@ -77,6 +76,7 @@ public class NonBlockingInterpreter implements Runnable {
     }
 
     private class ConsoleOutput implements OutputHandler {
+
         @Override
         public void handleMsg(String msg) {
             outMgr.println((String) msg);

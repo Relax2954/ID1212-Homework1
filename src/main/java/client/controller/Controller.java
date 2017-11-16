@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package client.controller;
 
 import java.io.IOException;
@@ -35,10 +30,7 @@ public class Controller {
         }).thenRun(() -> outputHandler.handleMsg("Connected to " + host + ":" + port));
     }
 
-    /**
-     * @see ServerConnection#disconnect() Blocks until disconnection is
-     * completed.
-     */
+    
     public void disconnect() throws IOException {
         serverConnection.disconnect();
     }

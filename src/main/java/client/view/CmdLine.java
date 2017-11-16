@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package client.view;
 
 import java.util.ArrayList;
@@ -25,8 +20,6 @@ class CmdLine {
 
     /**
      * Creates a new instance representing the specified line.
-     *
-     * @param enteredLine A line that was entered by the user.
      */
     CmdLine(String enteredLine) {
         this.enteredLine = enteredLine;

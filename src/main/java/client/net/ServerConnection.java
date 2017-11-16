@@ -1,4 +1,3 @@
-
 package client.net;
 
 import java.io.IOException;
@@ -29,12 +28,6 @@ public class ServerConnection {
     /**
      * Creates a new instance and connects to the specified server. Also starts
      * a listener thread receiving broadcast messages from server.
-     *
-     * @param host Host name or IP address of server.
-     * @param port Server's port number.
-     * @param broadcastHandler Called whenever a broadcast is received from
-     * server.
-     * @throws IOException If failed to connect.
      */
     public void connect(String host, int port, OutputHandler broadcastHandler) throws
             IOException {
@@ -48,8 +41,7 @@ public class ServerConnection {
     }
 
     /**
-     * Closes the connection with the server and stops the broadcast listener
-     * thread.
+     * Closes the connection with the server.
      *
      * @throws IOException If failed to close socket.
      */
@@ -64,10 +56,10 @@ public class ServerConnection {
         sendMsg(MsgType.GUESS, guess);
     }
 
-
     public void sendStartgame(String start) throws IOException {
         sendMsg(MsgType.START, start);
     }
+
     public void sendWrongInput() throws IOException {
         sendMsg(MsgType.WRONGINPUT, "");
     }
@@ -78,8 +70,6 @@ public class ServerConnection {
         toServer.flush();
         toServer.reset();
     }
-    
-    
 
     private class Listener implements Runnable {
 
@@ -103,7 +93,7 @@ public class ServerConnection {
         }
 
         private String extractMsgBody(Message msg) {
-            if (msg.getType() != MsgType.GIVE) {
+            if (msg.getType() != MsgType.NETWORKING) {
                 throw new MessageException("Received corrupt message: " + msg);
             }
             return msg.getBody();

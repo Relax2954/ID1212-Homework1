@@ -11,7 +11,6 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
-import server.controller.Controller;
 
 /**
  *
@@ -22,7 +21,6 @@ public class TheServer {
 
     private static final int LINGER_TIME = 5000;
     private static final int TIMEOUT_HALF_HOUR = 1800000;
-    private final Controller contr = new Controller();
     private final List<ClientHandler> clients = new ArrayList<>();
     private int portNo = 8080;
     
@@ -65,7 +63,7 @@ public class TheServer {
     private void startHandler(Socket clientSocket) throws SocketException {
         clientSocket.setSoLinger(true, LINGER_TIME);
         clientSocket.setSoTimeout(TIMEOUT_HALF_HOUR);
-        ClientHandler handler = new ClientHandler(this, clientSocket, contr.getConversation());
+        ClientHandler handler = new ClientHandler(this, clientSocket);
         synchronized (clients) {
             clients.add(handler);
         }
